@@ -15,7 +15,7 @@ if [ -z `which sudo` ] ; then
 fi
     
 echo "Checking dpkg database for missing packages"
-REQUIRED_PKGS="ca-certificates git-core subversion binutils libva1 libpcre3-dev libidn11-dev libboost1.50-dev libfreetype6-dev libusb-1.0-0-dev libdbus-1-dev libssl-dev libssh-dev libsmbclient-dev gcc-4.7 g++-4.7 sed pkg-config"
+REQUIRED_PKGS="ca-certificates git-core subversion binutils libva1 libpcre3-dev libidn11-dev libboost1.60-dev libfreetype6-dev libusb-1.0-0-dev libdbus-1-dev libssl-dev libssh-dev libsmbclient-dev gcc-5 g++-5 sed pkg-config"
 MISSING_PKGS=""
 for pkg in $REQUIRED_PKGS
 do
@@ -37,13 +37,13 @@ else
 	echo "Patching makefiles..."
 	echo "FLOAT=hard
 
-CFLAGS +=  -mfloat-abi=hard -mcpu=arm1176jzf-s -fomit-frame-pointer -mabi=aapcs-linux -mtune=arm1176jzf-s -mfpu=vfp -Wno-psabi -mno-apcs-stack-check -O3 -mstructure-size-boundary=32 -mno-sched-prolog -march=armv6zk `pkg-config dbus-1 --cflags`
+CFLAGS +=  -marm -mfloat-abi=hard -fomit-frame-pointer -mvectorize-with-neon-quad -mabi=aapcs-linux -mfpu=neon-fp-armv8 -mtune=cortex-a53 -mtls-dialect=gnu2 -funsafe-math-optimizations -munaligned-access -mlittle-endian -Wno-psabi -mno-apcs-stack-check -O3 -mstructure-size-boundary=32 -mno-sched-prolog `pkg-config dbus-1 --cflags`
 
 BUILDROOT	:=/usr/local/src/omxplayer
 TOOLCHAIN	:=/usr/
 LD			:= \$(TOOLCHAIN)/bin/ld
-CC			:= \$(TOOLCHAIN)/bin/gcc-4.7
-CXX       	:= \$(TOOLCHAIN)/bin/g++-4.7
+CC			:= \$(TOOLCHAIN)/bin/gcc-5
+CXX       	:= \$(TOOLCHAIN)/bin/g++-5
 OBJDUMP		:= \$(TOOLCHAIN)/bin/objdump
 RANLIB		:= \$(TOOLCHAIN)/bin/ranlib
 STRIP		:= \$(TOOLCHAIN)/bin/strip

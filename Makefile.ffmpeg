@@ -14,7 +14,7 @@ copy:
 
 .PHONY : compile
 compile: 
-	+$(MAKE) -C ffmpeg
+	+$(MAKE) -j5 -C ffmpeg
 
 .PHONY : configure
 configure: 
@@ -22,12 +22,12 @@ configure:
 	CFLAGS="$(CFLAGS) ${INCLUDES}" \
 	LDFLAGS="" \
   ./configure \
-			--extra-cflags="-mfpu=vfp -mfloat-abi=$(FLOAT) -mno-apcs-stack-check -mstructure-size-boundary=32 -mno-sched-prolog" \
+			--extra-cflags="-mfpu=neon-fp-armv8 -mfloat-abi=$(FLOAT) -mno-apcs-stack-check -mstructure-size-boundary=32 -mno-sched-prolog -mvectorize-with-neon-quad -funsafe-math-optimizations -mlittle-endian -munaligned-access" \
 			--enable-cross-compile \
 			--enable-shared \
 			--disable-static \
 			--arch=arm \
-			--cpu=arm1176jzf-s \
+			--cpu=cortex-a53 \
 			--target-os=linux \
 			--disable-hwaccels \
 			--enable-parsers \
@@ -48,10 +48,11 @@ configure:
 			--enable-openssl \
 			--enable-pthreads \
 			--enable-pic \
-			--disable-armv5te \
-			--disable-neon \
+			--enable-armv5te \
+			--enable-neon \
 			--enable-armv6t2 \
 			--enable-armv6 \
+			--enable-vfp
 			--enable-hardcoded-tables \
 			--disable-runtime-cpudetect \
 			--disable-debug \
